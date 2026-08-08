@@ -1,12 +1,18 @@
-# Shiv Tech — Site institucional
+Shiv Tech
 
-Página institucional estática, pronta para publicação no GitHub Pages.
+Projeto desenvolvido para centralizar e apresentar as soluções da Shiv Tech, reunindo informações sobre os produtos, recursos e possibilidades de aplicação.
 
-## Publicar
+A proposta é manter uma interface simples e objetiva, com foco na apresentação dos serviços e na experiência de navegação.
 
-1. Crie um repositório no GitHub.
-2. Envie `index.html` e `shiv-tech-logo.png` (se desejar usar a logo).
-3. Em **Settings → Pages**, selecione o branch principal e a pasta `/root`.
-4. Salve e aguarde o GitHub Pages publicar.
+Tecnologias
+HTML
+CSS
+JavaScript
+Estrutura
 
-O e-mail do botão de contato está configurado como `contato@shivtech.com.br`; altere no `index.html` se necessário.
+O projeto está organizado de forma a facilitar a manutenção e a evolução da aplicação, mantendo os arquivos de interface e recursos separados conforme sua finalidade.
+
+Acesso
+
+A versão publicada está disponível em:
+https://rana-shiv.github.io/Shiv-Tech/
