@@ -1,0 +1,170 @@
+---
+/**
+ * Página individual de cada produto.
+ *
+ * Não existe uma página por produto no código: existe UMA página que o Astro
+ * repete para cada arquivo Markdown em src/content/produtos/.
+ * Criar produto novo = criar um .md. A página aparece sozinha.
+ */
+import Base from '../../layouts/Base.astro';
+import CTA from '../../components/CTA.astro';
+import { url } from '../../lib/url';
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+
+export const getStaticPaths = (async () => {
+  const produtos = await getCollection('produtos');
+  return produtos.map((produto) => ({
+    params: { slug: produto.id },
+    props: { produto },
+  }));
+}) satisfies GetStaticPaths;
+
+const { produto } = Astro.props;
+const { Content } = await render(produto);
+const d = produto.data;
+---
+
+<Base titulo={d.nome} descricao={d.descricaoSeo}>
+  <section class="topo-produto">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Trilha de navegação">
+        <a href={url('/')}>Início</a>
+        <span aria-hidden="true">/</span>
+        <a href={url('/produtos')}>Produtos</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{d.nome}</span>
+      </nav>
+
+      <span
+        class={`badge ${d.status === 'disponivel' ? 'badge-live' : 'badge-soon'}`}
+      >
+        {d.status === 'disponivel' ? 'Produto Shiv Tech' : 'Em breve'}
+      </span>
+
+      <h1>{d.nome}</h1>
+      <p class="lead">{d.chamada}</p>
+    </div>
+  </section>
+
+  <!-- Problema e solução, lado a lado -->
+  <section class="par">
+    <div class="container">
+      <div class="grid grid-2">
+        <article class="card destaque-problema">
+          <h2>O problema</h2>
+          <p>{d.problema}</p>
+        </article>
+        <article class="card destaque-solucao">
+          <h2>A solução</h2>
+          <p>{d.solucao}</p>
+        </article>
+      </div>
+
+      {
+        d.recursos.length > 0 && (
+          <div class="recursos">
+            <h2>O que ele faz</h2>
+            <ul class="pill-list">
+              {d.recursos.map((recurso) => (
+                <li class="pill">{recurso}</li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      {
+        d.publico && (
+          <p class="publico">
+            <strong>Para quem é:</strong> {d.publico}
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Texto completo, vindo do arquivo Markdown -->
+  <section class="conteudo">
+    <div class="container">
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    titulo={`Quer conhecer o ${d.nome}?`}
+    texto="Conte como a sua empresa trabalha hoje e a gente mostra se este produto faz sentido para o seu caso."
+  />
+</Base>
+
+<style>
+  .topo-produto {
+    padding-block: 56px 30px;
+  }
+
+  .topo-produto h1 {
+    font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+    margin: 14px 0 14px;
+  }
+
+  .par {
+    padding-block: 20px;
+  }
+
+  .par .card h2 {
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 6px;
+  }
+
+  .par .card p {
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+
+  .destaque-problema h2 {
+    color: var(--muted);
+  }
+
+  .destaque-solucao {
+    border-color: rgba(22, 200, 238, 0.28);
+    background: linear-gradient(
+      145deg,
+      rgba(22, 140, 255, 0.1),
+      rgba(22, 200, 238, 0.04)
+    );
+  }
+
+  .destaque-solucao h2 {
+    color: var(--cyan-soft);
+  }
+
+  .recursos {
+    margin-top: 38px;
+  }
+
+  .recursos h2 {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--cyan-soft);
+    margin-bottom: 14px;
+  }
+
+  .publico {
+    margin-top: 26px;
+    color: var(--muted);
+    max-width: 720px;
+  }
+
+  .publico strong {
+    color: var(--text);
+  }
+
+  .conteudo {
+    padding-block: 20px 60px;
+  }
+</style>

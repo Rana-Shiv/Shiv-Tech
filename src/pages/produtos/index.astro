@@ -1,0 +1,86 @@
+---
+import Base from '../../layouts/Base.astro';
+import CTA from '../../components/CTA.astro';
+import { url } from '../../lib/url';
+import { getCollection } from 'astro:content';
+
+const produtos = (await getCollection('produtos')).sort(
+  (a, b) => a.data.ordem - b.data.ordem
+);
+---
+
+<Base
+  titulo="Produtos"
+  descricao="Produtos digitais desenvolvidos pela Shiv Tech: CRM para WhatsApp, Sistema Escolar e novas soluções para resolver problemas reais de empresas."
+>
+  <section class="topo-pagina">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Trilha de navegação">
+        <a href={url('/')}>Início</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Produtos</span>
+      </nav>
+      <p class="eyebrow">Produtos Shiv Tech</p>
+      <h1>Soluções prontas para usar.</h1>
+      <p class="lead">
+        Alguns problemas se repetem em muitas empresas. Quando isso acontece,
+        faz mais sentido construir um produto do que refazer o mesmo projeto
+        várias vezes — e é isso que a gente faz aqui.
+      </p>
+    </div>
+  </section>
+
+  <section class="grade-produtos">
+    <div class="container">
+      <div class="grid grid-3">
+        {
+          produtos.map((produto) => (
+            <a class="card card-link" href={url(`/produtos/${produto.id}`)}>
+              <span
+                class={`badge ${produto.data.status === 'disponivel' ? 'badge-live' : 'badge-soon'}`}
+              >
+                {produto.data.status === 'disponivel' ? 'Produto' : 'Em breve'}
+              </span>
+              <h2>{produto.data.nome}</h2>
+              <p>{produto.data.chamada}</p>
+              <span class="card-arrow">Conhecer o produto →</span>
+            </a>
+          ))
+        }
+        <article class="card">
+          <span class="badge badge-soon">Em breve</span>
+          <h2>Novas soluções</h2>
+          <p>
+            Produtos digitais desenvolvidos pela Shiv Tech para resolver
+            problemas reais de empresas.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    titulo="Tem um problema que se repete na sua empresa?"
+    texto="Se ele se repete em muitas empresas, talvez seja o nosso próximo produto. Conte pra gente."
+  />
+</Base>
+
+<style>
+  .topo-pagina {
+    padding-block: 56px 20px;
+  }
+
+  .topo-pagina h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    margin: 16px 0 14px;
+  }
+
+  .grade-produtos {
+    padding-top: 34px;
+  }
+
+  .card h2 {
+    font-size: 1.15rem;
+    margin-top: 6px;
+  }
+</style>

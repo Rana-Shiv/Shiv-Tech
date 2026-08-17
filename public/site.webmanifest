@@ -1,0 +1,14 @@
+{
+  "name": "Shiv Tech",
+  "short_name": "Shiv Tech",
+  "description": "Soluções digitais e consultoria para transformar problemas de negócio em resultados.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#050b18",
+  "theme_color": "#050b18",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

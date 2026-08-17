@@ -1,0 +1,81 @@
+---
+/**
+ * Tudo que os buscadores e as redes sociais leem sobre a página.
+ *
+ * Resolve três coisas que faltavam no site anterior:
+ * 1. canonical — evita que o Google trate variações da URL como páginas duplicadas
+ * 2. Open Graph / Twitter — o link deixa de aparecer "cru" no WhatsApp e no LinkedIn
+ * 3. JSON-LD — descreve a empresa em formato que o Google entende (Organization)
+ */
+import { url } from '../lib/url';
+import { marca } from '../data/navegacao';
+
+interface Props {
+  titulo: string;
+  descricao: string;
+  /** Deixe false em páginas que não devem ser indexadas (ex.: 404). */
+  indexar?: boolean;
+  /** Marca esta página como a "raiz" para o JSON-LD da organização. */
+  paginaInicial?: boolean;
+}
+
+const { titulo, descricao, indexar = true, paginaInicial = false } = Astro.props;
+
+const site = Astro.site ?? new URL('https://rana-shiv.github.io/Shiv-Tech/');
+const canonical = new URL(Astro.url.pathname, site).href.replace(/(.)\/$/, '$1');
+const imagemOG = new URL(url('/og-image.png'), site).href;
+const tituloCompleto = paginaInicial
+  ? `${marca.nome} — ${marca.assinatura}`
+  : `${titulo} | ${marca.nome}`;
+
+const dadosOrganizacao = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: marca.nome,
+  url: new URL(url('/'), site).href,
+  logo: new URL(url('/shiv-tech-logo.png'), site).href,
+  description: marca.descricaoCurta,
+  slogan: marca.assinatura,
+  areaServed: 'BR',
+  knowsAbout: [
+    'Desenvolvimento de sistemas',
+    'Automação de processos',
+    'Integração de sistemas',
+    'Inteligência artificial para empresas',
+    'Dashboards e Business Intelligence',
+    'Consultoria empresarial em tecnologia',
+  ],
+};
+---
+
+<title>{tituloCompleto}</title>
+<meta name="description" content={descricao} />
+<link rel="canonical" href={canonical} />
+{!indexar && <meta name="robots" content="noindex, follow" />}
+
+<!-- Open Graph (WhatsApp, LinkedIn, Facebook) -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={marca.nome} />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:title" content={tituloCompleto} />
+<meta property="og:description" content={descricao} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={imagemOG} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={`${marca.nome} — ${marca.assinatura}`} />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={tituloCompleto} />
+<meta name="twitter:description" content={descricao} />
+<meta name="twitter:image" content={imagemOG} />
+
+{
+  paginaInicial && (
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(dadosOrganizacao)}
+    />
+  )
+}

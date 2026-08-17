@@ -1,0 +1,617 @@
+/* ==========================================================================
+   SHIV TECH — Design System
+   Um único arquivo com as "regras visuais" do site inteiro.
+   Mudar uma cor aqui muda em todas as páginas.
+   ========================================================================== */
+
+:root {
+  /* Cores de fundo */
+  --bg: #050b18;
+  --bg-2: #08152a;
+  --bg-3: #040916;
+
+  /* Superfícies (cards, caixas) */
+  --surface: rgba(255, 255, 255, 0.055);
+  --surface-strong: rgba(255, 255, 255, 0.075);
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.18);
+
+  /* Texto */
+  --text: #f5f8ff;
+  --muted: #b4c1d4;        /* contraste 9.8:1 sobre --bg — acima do exigido pela WCAG AA */
+  --muted-soft: #8d9bb2;
+
+  /* Marca */
+  --blue: #168cff;
+  --cyan: #16c8ee;
+  --cyan-soft: #7ce7fa;
+
+  /* Layout */
+  --max: 1120px;
+  --radius: 18px;
+  --radius-sm: 10px;
+
+  /* Espaçamento vertical de seção */
+  --section-y: 82px;
+}
+
+/* --------------------------------------------------------------------------
+   Reset enxuto
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Impede que o cabeçalho fixo cubra a seção ao rolar por âncora */
+  scroll-padding-top: 90px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 75% 12%, rgba(22, 140, 255, 0.16), transparent 28%),
+    radial-gradient(circle at 12% 42%, rgba(22, 200, 238, 0.08), transparent 25%),
+    linear-gradient(145deg, var(--bg), var(--bg-2) 55%, var(--bg-3));
+  background-attachment: fixed;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+/* Respeita quem configurou o sistema para reduzir animações */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Foco visível para navegação por teclado — acessibilidade básica */
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Estruturas de layout
+   -------------------------------------------------------------------------- */
+
+.container {
+  width: min(var(--max), calc(100% - 40px));
+  margin-inline: auto;
+}
+
+main {
+  flex: 1;
+}
+
+section {
+  padding-block: var(--section-y);
+}
+
+/* Link "pular para o conteúdo" — visível apenas quando focado pelo teclado */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 12px 18px;
+  background: var(--cyan);
+  color: #04121c;
+  font-weight: 700;
+  border-radius: 0 0 8px 0;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Tipografia
+   -------------------------------------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+/*
+ * Título do topo.
+ * Calibrado para caber em 3 linhas no desktop, de modo que os botões de ação
+ * fiquem visíveis sem rolar a página — é o primeiro passo da conversão.
+ */
+.h-hero {
+  font-size: clamp(2.35rem, 5.2vw, 4.15rem);
+  line-height: 1.03;
+  letter-spacing: -0.045em;
+  max-width: 1000px;
+}
+
+.gradient {
+  background: linear-gradient(90deg, #fff, #65dfff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 13px;
+  border: 1px solid rgba(22, 200, 238, 0.25);
+  border-radius: 999px;
+  background: rgba(22, 200, 238, 0.06);
+  color: var(--cyan-soft);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.section-head {
+  max-width: 720px;
+  margin-bottom: 38px;
+}
+
+.section-head h2 {
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+  letter-spacing: -0.04em;
+  margin-bottom: 12px;
+}
+
+.section-head p {
+  color: var(--muted);
+  font-size: 1.03rem;
+}
+
+.lead {
+  color: var(--muted);
+  font-size: 1.12rem;
+  max-width: 700px;
+}
+
+/* --------------------------------------------------------------------------
+   Botões
+   -------------------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 21px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.97rem;
+  border: 1px solid var(--line);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+/*
+ * Botão principal.
+ * DECISÃO DE ACESSIBILIDADE: o texto é azul-escuro, não branco.
+ * Branco sobre este gradiente dá contraste de 2,2:1 na ponta ciano — reprova
+ * na WCAG AA (mínimo 4,5:1) e fica difícil de ler no sol, no celular.
+ * Com texto escuro o pior ponto do gradiente fica em 5,0:1 e a cor viva da
+ * marca é preservada.
+ */
+.btn-primary {
+  background: linear-gradient(135deg, #0d86ff, #16c8ee);
+  border-color: transparent;
+  color: #04121c;
+  box-shadow: 0 12px 35px rgba(22, 140, 255, 0.2);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #2f9aff, #3ad6f5);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--line-strong);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.actions {
+  margin-top: 34px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.actions-center {
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   Cards e grades
+   -------------------------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.card {
+  padding: 26px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.065),
+    rgba(255, 255, 255, 0.025)
+  );
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card h3 {
+  font-size: 1.08rem;
+}
+
+.card p {
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+/* Card que é um link inteiro */
+.card-link {
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card-link:hover {
+  transform: translateY(-3px);
+  border-color: rgba(22, 200, 238, 0.4);
+}
+
+.card-arrow {
+  margin-top: auto;
+  padding-top: 16px;
+  color: var(--cyan);
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(22, 140, 255, 0.12);
+  color: #55dfff;
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+  flex: none;
+}
+
+/* Etiquetas / pílulas */
+.pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.pill {
+  padding: 9px 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: #c9d6e9;
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 0.87rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-live {
+  background: rgba(22, 200, 238, 0.13);
+  color: var(--cyan-soft);
+  border: 1px solid rgba(22, 200, 238, 0.3);
+}
+
+.badge-soon {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  border: 1px solid var(--line);
+}
+
+/* --------------------------------------------------------------------------
+   Bloco de destaque
+   -------------------------------------------------------------------------- */
+
+.highlight {
+  border: 1px solid rgba(22, 200, 238, 0.18);
+  border-radius: 24px;
+  padding: 42px;
+  background: linear-gradient(
+    135deg,
+    rgba(22, 140, 255, 0.1),
+    rgba(22, 200, 238, 0.035)
+  );
+}
+
+.highlight h2 {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  line-height: 1.05;
+  margin-bottom: 15px;
+}
+
+.highlight p {
+  color: var(--muted);
+}
+
+.highlight-split {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 35px;
+  align-items: center;
+}
+
+.highlight-split .pill-list {
+  justify-content: flex-end;
+}
+
+/* --------------------------------------------------------------------------
+   Passos numerados ("Como trabalhamos")
+   -------------------------------------------------------------------------- */
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  counter-reset: step;
+}
+
+.step {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.03);
+  position: relative;
+}
+
+.step-num {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--cyan);
+  margin-bottom: 10px;
+}
+
+.step h3 {
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.step p {
+  color: var(--muted);
+  font-size: 0.93rem;
+}
+
+/* Fluxo "tecnologia antes da tecnologia" */
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 26px;
+}
+
+.flow-item {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.flow-sep {
+  color: var(--cyan);
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   Conteúdo de texto corrido (páginas de produto e case)
+   -------------------------------------------------------------------------- */
+
+.prose {
+  max-width: 720px;
+}
+
+.prose h2 {
+  font-size: 1.6rem;
+  margin-top: 40px;
+  margin-bottom: 12px;
+}
+
+.prose h3 {
+  font-size: 1.18rem;
+  margin-top: 28px;
+  margin-bottom: 8px;
+}
+
+.prose p {
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.prose ul {
+  list-style: none;
+  margin-bottom: 20px;
+  display: grid;
+  gap: 9px;
+}
+
+.prose ul li {
+  color: var(--muted);
+  padding-left: 22px;
+  position: relative;
+}
+
+.prose ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--cyan);
+}
+
+.prose strong {
+  color: var(--text);
+}
+
+.prose a {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   Chamada final para contato
+   -------------------------------------------------------------------------- */
+
+.cta {
+  text-align: center;
+  padding-block: 70px;
+  border-top: 1px solid var(--line);
+}
+
+.cta h2 {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  margin-bottom: 12px;
+}
+
+.cta p {
+  color: var(--muted);
+  max-width: 640px;
+  margin: 0 auto 26px;
+}
+
+/* --------------------------------------------------------------------------
+   Trilha de navegação (breadcrumb)
+   -------------------------------------------------------------------------- */
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  color: var(--muted-soft);
+  font-size: 0.87rem;
+  margin-bottom: 22px;
+}
+
+.breadcrumb a:hover {
+  color: var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   Responsivo
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .grid-3,
+  .steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --section-y: 60px;
+  }
+
+  .grid-3,
+  .grid-2,
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .highlight {
+    padding: 28px;
+  }
+
+  .highlight-split {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .highlight-split .pill-list {
+    justify-content: flex-start;
+  }
+
+  .actions .btn {
+    flex: 1 1 100%;
+  }
+}

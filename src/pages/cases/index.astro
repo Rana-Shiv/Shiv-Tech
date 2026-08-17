@@ -1,0 +1,108 @@
+---
+import Base from '../../layouts/Base.astro';
+import CTA from '../../components/CTA.astro';
+import { url } from '../../lib/url';
+import { getCollection } from 'astro:content';
+
+const cases = (await getCollection('cases')).sort(
+  (a, b) => a.data.ordem - b.data.ordem
+);
+---
+
+<Base
+  titulo="Projetos e cases"
+  descricao="Projetos desenvolvidos pela Shiv Tech: o problema, o contexto, a solução e a tecnologia usada em cada caso."
+>
+  <section class="topo-pagina">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Trilha de navegação">
+        <a href={url('/')}>Início</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Projetos e cases</span>
+      </nav>
+      <p class="eyebrow">Projetos e cases</p>
+      <h1>O que a gente construiu.</h1>
+      <p class="lead">
+        Cada projeto começa por um problema. Aqui contamos qual era, o que
+        estava em volta dele, o que decidimos fazer e por quê — sem número
+        inventado e sem promessa que não dá para verificar.
+      </p>
+    </div>
+  </section>
+
+  <section class="lista-cases">
+    <div class="container">
+      <div class="grid grid-2">
+        {
+          cases.map((item) => (
+            <a class="card card-link" href={url(`/cases/${item.id}`)}>
+              <div class="meta">
+                <span class="meta-cliente">{item.data.cliente}</span>
+                {item.data.emAndamento && (
+                  <span class="badge badge-soon">Em andamento</span>
+                )}
+              </div>
+              <h2>{item.data.titulo}</h2>
+              <p>{item.data.chamada}</p>
+              <span class="card-arrow">Ver o case →</span>
+            </a>
+          ))
+        }
+      </div>
+
+      <p class="nota">
+        A Shiv Tech está construindo seu portfólio. Os projetos publicados aqui
+        são desenvolvimentos próprios — preferimos mostrar trabalho real em
+        andamento a apresentar cases de clientes que ainda não existem.
+      </p>
+    </div>
+  </section>
+
+  <CTA />
+</Base>
+
+<style>
+  .topo-pagina {
+    padding-block: 56px 20px;
+  }
+
+  .topo-pagina h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    margin: 16px 0 14px;
+  }
+
+  .lista-cases {
+    padding-top: 34px;
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+
+  .meta-cliente {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--cyan-soft);
+    font-weight: 700;
+  }
+
+  .card h2 {
+    font-size: 1.2rem;
+  }
+
+  .nota {
+    margin-top: 34px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.025);
+    color: var(--muted);
+    font-size: 0.94rem;
+    max-width: 760px;
+  }
+</style>

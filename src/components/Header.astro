@@ -1,0 +1,223 @@
+---
+/**
+ * Cabeçalho fixo com menu.
+ *
+ * Decisão de UX: no celular o menu vira um botão sanfona em vez de sumir
+ * (era o comportamento do site anterior — o visitante de celular, que é a
+ * maioria, ficava sem navegação nenhuma).
+ */
+import { menuPrincipal } from '../data/navegacao';
+import { url, isActive } from '../lib/url';
+
+const caminhoAtual = Astro.url.pathname;
+---
+
+<header class="topo">
+  <div class="container topo-inner">
+    <a class="marca" href={url('/')} aria-label="Shiv Tech — página inicial">
+      <span class="marca-simbolo" aria-hidden="true">S</span>
+      <span class="marca-texto">SHIV <span class="marca-destaque">TECH</span></span>
+    </a>
+
+    <button
+      class="menu-botao"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menu-principal"
+      aria-label="Abrir menu de navegação"
+    >
+      <span class="menu-barra" aria-hidden="true"></span>
+      <span class="menu-barra" aria-hidden="true"></span>
+      <span class="menu-barra" aria-hidden="true"></span>
+    </button>
+
+    <nav id="menu-principal" class="menu" aria-label="Navegação principal">
+      <ul>
+        {
+          menuPrincipal.map((item) => (
+            <li>
+              <a
+                href={url(item.href)}
+                aria-current={isActive(caminhoAtual, item.href) ? 'page' : undefined}
+              >
+                {item.rotulo}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .topo {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    background: rgba(5, 11, 24, 0.82);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .topo-inner {
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .marca {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    flex: none;
+  }
+
+  .marca-simbolo {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 900;
+    background: linear-gradient(135deg, #0879ff, #16c8ee);
+    box-shadow: 0 8px 28px rgba(22, 140, 255, 0.28);
+  }
+
+  .marca-destaque {
+    color: #18bff0;
+  }
+
+  .menu ul {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .menu a {
+    color: var(--muted);
+    font-size: 0.92rem;
+    font-weight: 550;
+    padding: 6px 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .menu a:hover {
+    color: #fff;
+  }
+
+  .menu a[aria-current='page'] {
+    color: #fff;
+    border-bottom-color: var(--cyan);
+  }
+
+  /* Botão do menu — escondido no desktop */
+  .menu-botao {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 0 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .menu-barra {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  @media (max-width: 860px) {
+    .topo-inner {
+      flex-wrap: wrap;
+    }
+
+    .menu-botao {
+      display: flex;
+      order: 2;
+    }
+
+    .menu {
+      order: 3;
+      flex-basis: 100%;
+      display: none;
+      padding-bottom: 14px;
+    }
+
+    .menu[data-aberto='true'] {
+      display: block;
+    }
+
+    .menu ul {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 2px;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px 4px;
+      border-bottom: 1px solid var(--line);
+      font-size: 1rem;
+    }
+
+    .menu a[aria-current='page'] {
+      border-bottom-color: var(--cyan);
+    }
+
+    /* Botão vira "X" quando aberto */
+    .menu-botao[aria-expanded='true'] .menu-barra:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .menu-botao[aria-expanded='true'] .menu-barra:nth-child(2) {
+      opacity: 0;
+    }
+    .menu-botao[aria-expanded='true'] .menu-barra:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+  }
+</style>
+
+<script>
+  // Único JavaScript do site: abrir e fechar o menu no celular.
+  const botao = document.querySelector<HTMLButtonElement>('.menu-botao');
+  const menu = document.querySelector<HTMLElement>('#menu-principal');
+
+  if (botao && menu) {
+    const definirEstado = (aberto: boolean) => {
+      botao.setAttribute('aria-expanded', String(aberto));
+      botao.setAttribute(
+        'aria-label',
+        aberto ? 'Fechar menu de navegação' : 'Abrir menu de navegação'
+      );
+      menu.dataset.aberto = String(aberto);
+    };
+
+    botao.addEventListener('click', () => {
+      definirEstado(botao.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Esc fecha o menu e devolve o foco ao botão
+    document.addEventListener('keydown', (evento) => {
+      if (evento.key === 'Escape' && botao.getAttribute('aria-expanded') === 'true') {
+        definirEstado(false);
+        botao.focus();
+      }
+    });
+  }
+</script>

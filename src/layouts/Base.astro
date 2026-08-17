@@ -1,0 +1,49 @@
+---
+/**
+ * Molde de todas as páginas: <head>, cabeçalho e rodapé.
+ * Cada página escreve só o seu conteúdo — o resto vem daqui.
+ * Mudou o menu ou o rodapé? Muda em todas as páginas de uma vez.
+ */
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { url } from '../lib/url';
+
+interface Props {
+  titulo: string;
+  descricao: string;
+  indexar?: boolean;
+  paginaInicial?: boolean;
+}
+
+const { titulo, descricao, indexar = true, paginaInicial = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#050b18" />
+    <meta name="author" content="Shiv Tech" />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
+    <link rel="manifest" href={url('/site.webmanifest')} />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
+    <SEO
+      titulo={titulo}
+      descricao={descricao}
+      indexar={indexar}
+      paginaInicial={paginaInicial}
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <Header />
+    <main id="conteudo">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

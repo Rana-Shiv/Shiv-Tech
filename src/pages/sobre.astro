@@ -1,0 +1,139 @@
+---
+import Base from '../layouts/Base.astro';
+import CTA from '../components/CTA.astro';
+import { url } from '../lib/url';
+
+const principios = [
+  {
+    titulo: 'O problema vem antes da ferramenta',
+    texto:
+      'Ninguém precisa de um sistema. As pessoas precisam vender mais, perder menos tempo, errar menos ou enxergar melhor o próprio negócio. A tecnologia é o meio, e escolher o meio antes de entender o fim é a origem da maior parte dos projetos que dão errado.',
+  },
+  {
+    titulo: 'A solução mais simples que funciona',
+    texto:
+      'Existe uma tentação constante de construir mais do que o necessário. Resistimos a ela. Solução menor entra em operação mais rápido, custa menos para manter e é mais fácil de mudar quando a realidade muda.',
+  },
+  {
+    titulo: 'Você precisa conseguir manter',
+    texto:
+      'Não adianta entregar algo que só funciona enquanto a gente estiver por perto. Priorizamos tecnologias comuns de mercado, para que você não fique refém de um fornecedor único — inclusive de nós.',
+  },
+  {
+    titulo: 'Dizer não também é entrega',
+    texto:
+      'Quando avaliamos que algo é caro demais, desnecessário ou prematuro, falamos. Perder um projeto é mais barato para todo mundo do que entregar uma solução que não deveria existir.',
+  },
+];
+---
+
+<Base
+  titulo="Sobre a Shiv Tech"
+  descricao="A Shiv Tech é uma empresa de tecnologia e consultoria empresarial que transforma problemas de negócio em soluções digitais práticas."
+>
+  <section class="topo-pagina">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Trilha de navegação">
+        <a href={url('/')}>Início</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Sobre</span>
+      </nav>
+      <p class="eyebrow">Sobre a Shiv Tech</p>
+      <h1>Tecnologia que resolve.</h1>
+      <p class="lead">
+        A Shiv Tech é uma empresa de tecnologia e consultoria empresarial. Nosso
+        trabalho é transformar problemas de negócio em soluções práticas —
+        usando software, automação, dados e, principalmente, entendimento do
+        que está acontecendo antes de decidir o que construir.
+      </p>
+    </div>
+  </section>
+
+  <section class="texto">
+    <div class="container">
+      <div class="prose">
+        <h2>Onde a gente atua</h2>
+        <p>
+          Trabalhamos na interseção entre <strong>tecnologia</strong>,
+          <strong>negócios</strong> e <strong>consultoria</strong>. Na prática,
+          isso significa que a mesma empresa que escreve o código também
+          participa da conversa sobre o processo, o custo e o resultado
+          esperado.
+        </p>
+        <p>
+          Essa combinação existe por um motivo prático: a maior parte dos
+          projetos de tecnologia que fracassam não fracassa por erro técnico.
+          Fracassa porque foi construída a coisa errada, para o problema errado,
+          por falta de conversa entre quem entende do negócio e quem entende da
+          ferramenta.
+        </p>
+
+        <h2>Como a gente trabalha</h2>
+        <p>
+          Entregamos em blocos pequenos e funcionais. Cada etapa precisa poder
+          ser testada e usada antes da próxima começar — é assim que se descobre
+          cedo que algo não era necessário, em vez de descobrir na entrega
+          final.
+        </p>
+        <p>
+          Toda decisão técnica relevante vem acompanhada do impacto no negócio:
+          quanto custa, quanto demora, qual o risco e o que muda para o cliente
+          final.
+        </p>
+
+        <h2>Nossos princípios</h2>
+      </div>
+
+      <div class="grid grid-2 principios">
+        {
+          principios.map((principio) => (
+            <article class="card">
+              <h3>{principio.titulo}</h3>
+              <p>{principio.texto}</p>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="prose">
+        <h2>O momento da empresa</h2>
+        <p>
+          A Shiv Tech está construindo seu portfólio e seus primeiros produtos
+          próprios. Preferimos dizer isso abertamente a preencher o site com
+          cases genéricos e métricas que não aconteceram.
+        </p>
+        <p>
+          O que oferecemos hoje é atenção real ao problema de cada cliente — algo
+          que, convenhamos, tende a ser mais fácil de conseguir com uma empresa
+          neste estágio do que com uma agenda cheia.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+</Base>
+
+<style>
+  .topo-pagina {
+    padding-block: 56px 20px;
+  }
+
+  .topo-pagina h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    margin: 16px 0 14px;
+  }
+
+  .texto {
+    padding-top: 20px;
+  }
+
+  .principios {
+    margin-block: 26px 20px;
+  }
+
+  .principios h3 {
+    font-size: 1.08rem;
+    margin-bottom: 6px;
+  }
+</style>

@@ -1,0 +1,154 @@
+---
+import Base from '../layouts/Base.astro';
+import CTA from '../components/CTA.astro';
+import { url } from '../lib/url';
+import { solucoes } from '../data/solucoes';
+---
+
+<Base
+  titulo="Soluções"
+  descricao="Desenvolvimento de sistemas sob medida, automação de processos, inteligência artificial, integração de sistemas e dashboards. Soluções digitais para empresas, organizadas por problema resolvido."
+>
+  <section class="topo-pagina">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Trilha de navegação">
+        <a href={url('/')}>Início</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Soluções</span>
+      </nav>
+      <p class="eyebrow">Soluções</p>
+      <h1>O que a gente resolve.</h1>
+      <p class="lead">
+        Organizamos nossas soluções pelo problema que elas resolvem, não pela
+        tecnologia que usam. A tecnologia é consequência da decisão — e a
+        decisão vem depois de entender o seu caso.
+      </p>
+    </div>
+  </section>
+
+  <section class="lista">
+    <div class="container">
+      {
+        solucoes.map((solucao) => (
+          <article class="solucao" id={solucao.id}>
+            <div class="solucao-cabecalho">
+              <div class="icon" aria-hidden="true">
+                {solucao.icone}
+              </div>
+              <h2>{solucao.titulo}</h2>
+            </div>
+            <div class="solucao-corpo">
+              <p class="solucao-resumo">{solucao.resumo}</p>
+              <p class="solucao-detalhe">{solucao.detalhe}</p>
+              <h3>Provavelmente é o seu caso se:</h3>
+              <ul class="sinais">
+                {solucao.sinais.map((sinal) => (
+                  <li>{sinal}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="competencias">
+    <div class="container">
+      <div class="highlight">
+        <h2>E a tecnologia?</h2>
+        <p>
+          Escolhemos a stack depois de entender o problema, priorizando
+          tecnologias comuns de mercado — para que a solução seja sustentável e
+          você não fique dependente de um fornecedor único. Trabalhamos com
+          aplicações web, bancos de dados relacionais, integrações via API,
+          automações e ferramentas de análise de dados.
+        </p>
+        <div class="actions">
+          <a class="btn btn-secondary" href={url('/cases')}
+            >Ver projetos e cases</a
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+</Base>
+
+<style>
+  .topo-pagina {
+    padding-block: 56px 20px;
+  }
+
+  .topo-pagina h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    margin: 16px 0 14px;
+  }
+
+  .lista {
+    padding-top: 34px;
+  }
+
+  .solucao {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 32px;
+    padding-block: 38px;
+    border-top: 1px solid var(--line);
+    scroll-margin-top: 100px;
+  }
+
+  .solucao-cabecalho h2 {
+    font-size: 1.5rem;
+  }
+
+  .solucao-resumo {
+    color: var(--text);
+    font-size: 1.06rem;
+    margin-bottom: 12px;
+  }
+
+  .solucao-detalhe {
+    color: var(--muted);
+    margin-bottom: 22px;
+  }
+
+  .solucao-corpo h3 {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--cyan-soft);
+    margin-bottom: 12px;
+  }
+
+  .sinais {
+    display: grid;
+    gap: 9px;
+  }
+
+  .sinais li {
+    color: var(--muted);
+    padding-left: 22px;
+    position: relative;
+    font-size: 0.95rem;
+  }
+
+  .sinais li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: var(--cyan);
+  }
+
+  @media (max-width: 860px) {
+    .solucao {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+  }
+</style>

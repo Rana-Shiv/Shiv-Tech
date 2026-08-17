@@ -1,0 +1,228 @@
+---
+import Base from '../layouts/Base.astro';
+import ComoTrabalhamos from '../components/ComoTrabalhamos.astro';
+import CTA from '../components/CTA.astro';
+import { url } from '../lib/url';
+import { solucoes } from '../data/solucoes';
+import { getCollection } from 'astro:content';
+
+const produtos = (await getCollection('produtos')).sort(
+  (a, b) => a.data.ordem - b.data.ordem
+);
+
+/**
+ * Decisão de UX: logo abaixo do topo, três caminhos.
+ * O visitante chega ao site em um de três estados mentais — tenho um problema,
+ * quero construir algo, ou quero comprar algo pronto. Mostrar os três de
+ * imediato é mais eficiente do que obrigá-lo a interpretar um menu.
+ */
+const caminhos = [
+  {
+    rotulo: 'Preciso resolver um problema',
+    descricao:
+      'Algo não funciona bem, mas não está claro o que fazer. Começamos pelo diagnóstico.',
+    destino: '/consultoria',
+    acao: 'Ver consultoria',
+  },
+  {
+    rotulo: 'Preciso construir algo',
+    descricao:
+      'Já existe uma necessidade definida: um sistema, uma automação, uma integração.',
+    destino: '/solucoes',
+    acao: 'Ver soluções',
+  },
+  {
+    rotulo: 'Quero uma solução pronta',
+    descricao:
+      'Produtos digitais desenvolvidos pela Shiv Tech, prontos para usar.',
+    destino: '/produtos',
+    acao: 'Ver produtos',
+  },
+];
+---
+
+<Base
+  titulo="Tecnologia que resolve"
+  descricao="A Shiv Tech desenvolve soluções digitais, automações e sistemas sob medida, combinando tecnologia e visão de negócio para tornar empresas mais eficientes, organizadas e preparadas para crescer."
+  paginaInicial={true}
+>
+  <!-- Topo -->
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Tecnologia que resolve</p>
+      <h1 class="h-hero">
+        Tecnologia para transformar <span class="gradient"
+          >problemas de negócio</span
+        > em soluções.
+      </h1>
+      <p class="lead hero-lead">
+        A Shiv Tech desenvolve soluções digitais, automações e sistemas sob
+        medida, combinando tecnologia e visão de negócio para tornar empresas
+        mais eficientes, organizadas e preparadas para crescer.
+      </p>
+      <div class="actions actions-center">
+        <a class="btn btn-primary" href={url('/contato')}
+          >Conte o seu problema</a
+        >
+        <a class="btn btn-secondary" href={url('/solucoes')}
+          >Conheça as soluções</a
+        >
+      </div>
+    </div>
+  </section>
+
+  <!-- Três caminhos -->
+  <section class="caminhos-secao" aria-labelledby="caminhos-titulo">
+    <div class="container">
+      <h2 id="caminhos-titulo" class="visually-hidden">Por onde começar</h2>
+      <div class="grid grid-3">
+        {
+          caminhos.map((caminho) => (
+            <a class="card card-link" href={url(caminho.destino)}>
+              <h3>{caminho.rotulo}</h3>
+              <p>{caminho.descricao}</p>
+              <span class="card-arrow">{caminho.acao} →</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Soluções -->
+  <section id="solucoes">
+    <div class="container">
+      <div class="section-head">
+        <h2>Do problema à solução.</h2>
+        <p>
+          Atuamos de forma consultiva e tecnológica, construindo soluções sob
+          medida para as necessidades reais de cada negócio.
+        </p>
+      </div>
+      <div class="grid grid-3">
+        {
+          solucoes.map((solucao) => (
+            <article class="card">
+              <div class="icon" aria-hidden="true">
+                {solucao.icone}
+              </div>
+              <h3>{solucao.titulo}</h3>
+              <p>{solucao.resumo}</p>
+            </article>
+          ))
+        }
+      </div>
+      <div class="actions">
+        <a class="btn btn-secondary" href={url('/solucoes')}
+          >Ver todas as soluções em detalhe</a
+        >
+      </div>
+    </div>
+  </section>
+
+  <!-- Produtos -->
+  <section id="produtos">
+    <div class="container">
+      <div class="section-head">
+        <h2>Produtos Shiv Tech</h2>
+        <p>
+          Além dos projetos sob medida, desenvolvemos produtos digitais próprios
+          para resolver problemas que se repetem em muitas empresas.
+        </p>
+      </div>
+      <div class="grid grid-3">
+        {
+          produtos.map((produto) => (
+            <a class="card card-link" href={url(`/produtos/${produto.id}`)}>
+              <span
+                class={`badge ${produto.data.status === 'disponivel' ? 'badge-live' : 'badge-soon'}`}
+              >
+                {produto.data.status === 'disponivel' ? 'Produto' : 'Em breve'}
+              </span>
+              <h3>{produto.data.nome}</h3>
+              <p>{produto.data.chamada}</p>
+              <span class="card-arrow">Conhecer o produto →</span>
+            </a>
+          ))
+        }
+        <article class="card">
+          <span class="badge badge-soon">Em breve</span>
+          <h3>Novas soluções</h3>
+          <p>
+            Produtos digitais desenvolvidos pela Shiv Tech para resolver
+            problemas reais de empresas.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Diferencial -->
+  <section id="diferencial">
+    <div class="container">
+      <div class="highlight highlight-split">
+        <div>
+          <h2>
+            Não entregamos apenas tecnologia.
+            <span class="gradient">Entregamos resultado.</span>
+          </h2>
+          <p>
+            Nosso trabalho começa entendendo o problema. A tecnologia entra como
+            meio para simplificar processos, gerar eficiência, melhorar a gestão
+            e criar novas possibilidades.
+          </p>
+        </div>
+        <ul class="pill-list">
+          <li class="pill">Estratégia</li>
+          <li class="pill">Automação</li>
+          <li class="pill">Dados</li>
+          <li class="pill">IA</li>
+          <li class="pill">Software</li>
+          <li class="pill">Integrações</li>
+          <li class="pill">Gestão</li>
+          <li class="pill">Inovação</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <ComoTrabalhamos />
+
+  <CTA />
+</Base>
+
+<style>
+  .hero {
+    padding-block: 78px 62px;
+    text-align: center;
+  }
+
+  .hero .h-hero {
+    margin: 24px auto 18px;
+  }
+
+  .hero-lead {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .caminhos-secao {
+    padding-top: 0;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 720px) {
+    .hero {
+      padding-block: 64px 48px;
+    }
+  }
+</style>

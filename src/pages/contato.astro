@@ -1,0 +1,235 @@
+---
+/**
+ * Página de contato.
+ *
+ * DECISÃO: site estático não tem servidor, então não há formulário que envie
+ * e-mail sozinho. Em vez de um campo vazio inútil, cada tipo de necessidade é
+ * um botão que abre o e-mail JÁ COM assunto e roteiro de mensagem preenchidos.
+ *
+ * Por que isso importa para o negócio: reduz o esforço do visitante (ele não
+ * precisa pensar no que escrever) e faz o lead chegar qualificado, com as
+ * informações que você precisa para responder — que é o que um formulário
+ * faria. Custo zero e nada para manter.
+ *
+ * Quando o volume justificar, trocamos por formulário real. Aí a página passa a
+ * coletar dado pessoal e entram LGPD e política de privacidade.
+ */
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+import { emailContato } from '../data/navegacao';
+
+interface Necessidade {
+  id: string;
+  rotulo: string;
+  descricao: string;
+  assunto: string;
+  roteiro: string[];
+}
+
+const necessidades: Necessidade[] = [
+  {
+    id: 'sistema',
+    rotulo: 'Quero desenvolver um sistema',
+    descricao: 'Uma aplicação, plataforma ou ferramenta sob medida.',
+    assunto: 'Desenvolvimento de sistema',
+    roteiro: [
+      'O que a empresa faz:',
+      'O que o sistema precisa resolver:',
+      'Como isso é feito hoje:',
+      'Quantas pessoas vão usar:',
+      'Prazo ou data importante:',
+    ],
+  },
+  {
+    id: 'automacao',
+    rotulo: 'Quero automatizar um processo',
+    descricao: 'Uma tarefa repetitiva que consome tempo da equipe.',
+    assunto: 'Automação de processo',
+    roteiro: [
+      'Qual tarefa se repete:',
+      'Com que frequência (por dia, semana ou mês):',
+      'Quanto tempo consome hoje:',
+      'Quais sistemas ou planilhas estão envolvidos:',
+    ],
+  },
+  {
+    id: 'consultoria',
+    rotulo: 'Quero uma consultoria',
+    descricao: 'Diagnóstico de processos, tecnologia ou gestão.',
+    assunto: 'Consultoria empresarial',
+    roteiro: [
+      'O que a empresa faz:',
+      'O que não está funcionando bem:',
+      'Há quanto tempo isso acontece:',
+      'O que já foi tentado:',
+    ],
+  },
+  {
+    id: 'produto',
+    rotulo: 'Quero conhecer um produto',
+    descricao: 'CRM para WhatsApp, Sistema Escolar ou próximos lançamentos.',
+    assunto: 'Interesse em produto Shiv Tech',
+    roteiro: [
+      'Qual produto interessa:',
+      'O que a empresa faz:',
+      'Como esse processo funciona hoje:',
+      'Quantas pessoas usariam:',
+    ],
+  },
+  {
+    id: 'integracao',
+    rotulo: 'Quero integrar sistemas',
+    descricao: 'Ferramentas que hoje não conversam entre si.',
+    assunto: 'Integração de sistemas',
+    roteiro: [
+      'Quais sistemas precisam se conectar:',
+      'Que informação deveria circular entre eles:',
+      'Como isso é resolvido hoje:',
+    ],
+  },
+  {
+    id: 'outro',
+    rotulo: 'Outro assunto',
+    descricao: 'Parceria, dúvida ou qualquer outra conversa.',
+    assunto: 'Contato',
+    roteiro: ['Sobre o que você quer falar:'],
+  },
+];
+
+/** Monta o link mailto com assunto e corpo já preenchidos. */
+function montarMailto(necessidade: Necessidade): string {
+  const corpo = [
+    'Olá, Shiv Tech.',
+    '',
+    ...necessidade.roteiro.map((linha) => `${linha} `),
+    '',
+    'Nome:',
+    'Empresa:',
+    'WhatsApp:',
+    '',
+  ].join('\n');
+
+  const assunto = encodeURIComponent(`[Site] ${necessidade.assunto}`);
+  return `mailto:${emailContato}?subject=${assunto}&body=${encodeURIComponent(corpo)}`;
+}
+---
+
+<Base
+  titulo="Contato"
+  descricao="Fale com a Shiv Tech sobre desenvolvimento de sistemas, automação de processos, integrações, consultoria empresarial ou nossos produtos digitais."
+>
+  <section class="topo-pagina">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Trilha de navegação">
+        <a href={url('/')}>Início</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Contato</span>
+      </nav>
+      <p class="eyebrow">Contato</p>
+      <h1>Conte qual problema precisa resolver.</h1>
+      <p class="lead">
+        Escolha abaixo o que mais se aproxima da sua situação. O e-mail abre já
+        com um roteiro do que é útil contar — assim a primeira resposta já vem
+        com conteúdo, e não com um questionário.
+      </p>
+    </div>
+  </section>
+
+  <section class="opcoes">
+    <div class="container">
+      <h2 class="titulo-secao">O que você precisa?</h2>
+      <ul class="grid grid-3">
+        {
+          necessidades.map((necessidade) => (
+            <li>
+              <a class="card card-link opcao" href={montarMailto(necessidade)}>
+                <h3>{necessidade.rotulo}</h3>
+                <p>{necessidade.descricao}</p>
+                <span class="card-arrow">Escrever e-mail →</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="direto">
+        <h2>Prefere escrever do seu jeito?</h2>
+        <p>
+          Sem problema. O endereço é
+          <a href={`mailto:${emailContato}`}>{emailContato}</a>.
+        </p>
+        <p class="aviso">
+          Respondemos em até 1 dia útil. Se o seu caso não se encaixar em
+          nenhuma das opções acima, escreva mesmo assim — parte dos melhores
+          projetos começa com "não sei bem o que eu preciso".
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .topo-pagina {
+    padding-block: 56px 20px;
+  }
+
+  .topo-pagina h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    margin: 16px 0 14px;
+  }
+
+  .opcoes {
+    padding-top: 34px;
+  }
+
+  .titulo-secao {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--cyan-soft);
+    margin-bottom: 16px;
+  }
+
+  .opcoes ul {
+    list-style: none;
+  }
+
+  .opcao {
+    height: 100%;
+  }
+
+  .opcao h3 {
+    font-size: 1.05rem;
+  }
+
+  .direto {
+    margin-top: 40px;
+    padding: 30px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.025);
+    max-width: 760px;
+  }
+
+  .direto h2 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+  }
+
+  .direto p {
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .direto a {
+    color: var(--cyan);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    word-break: break-word;
+  }
+
+  .aviso {
+    font-size: 0.93rem;
+    margin-bottom: 0 !important;
+  }
+</style>

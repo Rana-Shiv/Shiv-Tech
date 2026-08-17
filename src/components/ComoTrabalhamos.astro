@@ -1,0 +1,90 @@
+---
+/**
+ * Seção "Como trabalhamos" + o conceito de tecnologia entrar depois do
+ * entendimento do problema. É o que separa consultoria de fábrica de software,
+ * então aparece cedo na home.
+ */
+import { comoTrabalhamos, fluxoTecnologia } from '../data/solucoes';
+
+interface Props {
+  mostrarFluxo?: boolean;
+}
+
+const { mostrarFluxo = true } = Astro.props;
+---
+
+<section id="como-trabalhamos">
+  <div class="container">
+    <div class="section-head">
+      <h2>Como trabalhamos</h2>
+      <p>
+        Primeiro entendemos o problema. Depois decidimos qual tecnologia
+        realmente faz sentido — se é que faz.
+      </p>
+    </div>
+
+    <ol class="steps">
+      {
+        comoTrabalhamos.map((passo) => (
+          <li class="step">
+            <div class="step-num">{passo.numero}</div>
+            <h3>{passo.titulo}</h3>
+            <p>{passo.descricao}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    {
+      mostrarFluxo && (
+        <div class="fluxo-bloco">
+          <h3>Tecnologia antes da tecnologia</h3>
+          <p>
+            Uma software house recebe "preciso de um sistema" e responde "quanto
+            você quer gastar?". Nós preferimos começar antes disso.
+          </p>
+          <ol class="flow" aria-label="Etapas do nosso processo, do problema ao acompanhamento">
+            {fluxoTecnologia.map((etapa, indice) => (
+              <>
+                <li class="flow-item">{etapa}</li>
+                {indice < fluxoTecnologia.length - 1 && (
+                  <li class="flow-sep" aria-hidden="true">
+                    →
+                  </li>
+                )}
+              </>
+            ))}
+          </ol>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .fluxo-bloco {
+    margin-top: 34px;
+    padding: 32px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .fluxo-bloco h3 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+
+  .fluxo-bloco p {
+    color: var(--muted);
+    max-width: 640px;
+  }
+
+  .steps li {
+    list-style: none;
+  }
+
+  .flow li {
+    list-style: none;
+  }
+</style>

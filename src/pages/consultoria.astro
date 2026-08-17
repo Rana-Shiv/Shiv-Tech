@@ -1,0 +1,102 @@
+---
+import Base from '../layouts/Base.astro';
+import ComoTrabalhamos from '../components/ComoTrabalhamos.astro';
+import CTA from '../components/CTA.astro';
+import { url } from '../lib/url';
+import { servicosConsultoria } from '../data/solucoes';
+---
+
+<Base
+  titulo="Consultoria empresarial"
+  descricao="Consultoria empresarial apoiada em tecnologia: diagnóstico de processos, identificação de gargalos, automação e estratégia tecnológica para empresas."
+>
+  <section class="topo-pagina">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Trilha de navegação">
+        <a href={url('/')}>Início</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Consultoria</span>
+      </nav>
+      <p class="eyebrow">Consultoria</p>
+      <h1>Antes de construir, entender.</h1>
+      <p class="lead">
+        Nem todo problema se resolve com software. A consultoria da Shiv Tech
+        existe para identificar o que realmente está travando a empresa — e
+        decidir, com você, o que vale a pena fazer a respeito.
+      </p>
+    </div>
+  </section>
+
+  <section class="posicionamento">
+    <div class="container">
+      <div class="highlight">
+        <h2>Não é só consultoria de TI.</h2>
+        <p>
+          É consultoria para identificar problemas, oportunidades e processos
+          que podem ser melhorados por meio de gestão e tecnologia. Às vezes a
+          resposta é um sistema. Muitas vezes é mudar um processo, usar melhor
+          uma ferramenta que a empresa já paga, ou parar de fazer algo que
+          deixou de fazer sentido.
+        </p>
+        <p class="reforco">
+          Se a conclusão for que não vale a pena construir nada agora, essa vai
+          ser a nossa recomendação.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="servicos">
+    <div class="container">
+      <div class="section-head">
+        <h2>O que fazemos na consultoria</h2>
+        <p>
+          Os trabalhos podem ser contratados de forma isolada ou combinados,
+          conforme o momento da empresa.
+        </p>
+      </div>
+      <div class="grid grid-3">
+        {
+          servicosConsultoria.map((servico) => (
+            <article class="card">
+              <h3>{servico.titulo}</h3>
+              <p>{servico.descricao}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <ComoTrabalhamos />
+
+  <CTA
+    titulo="Não sabe exatamente qual é o problema?"
+    texto="Isso é normal — e é justamente o ponto de partida de um diagnóstico. Conte a situação e a gente ajuda a nomear o problema."
+  />
+</Base>
+
+<style>
+  .topo-pagina {
+    padding-block: 56px 20px;
+  }
+
+  .topo-pagina h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    margin: 16px 0 14px;
+  }
+
+  .posicionamento {
+    padding-block: 34px;
+  }
+
+  .posicionamento p {
+    max-width: 760px;
+    margin-bottom: 14px;
+  }
+
+  .reforco {
+    color: var(--text) !important;
+    font-weight: 600;
+  }
+</style>

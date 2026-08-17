@@ -1,0 +1,6 @@
+# Todos os buscadores podem indexar o site inteiro.
+User-agent: *
+Allow: /
+
+# Mapa do site — gerado automaticamente a cada publicação.
+Sitemap: https://rana-shiv.github.io/Shiv-Tech/sitemap-index.xml

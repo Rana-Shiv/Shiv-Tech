@@ -1,0 +1,175 @@
+---
+import { url } from '../lib/url';
+import { marca, emailContato } from '../data/navegacao';
+
+const ano = new Date().getFullYear();
+
+const colunas = [
+  {
+    titulo: 'Soluções',
+    itens: [
+      { rotulo: 'Desenvolvimento de sistemas', href: '/solucoes#desenvolvimento' },
+      { rotulo: 'Automação de processos', href: '/solucoes#automacao' },
+      { rotulo: 'Inteligência artificial', href: '/solucoes#ia' },
+      { rotulo: 'Integrações', href: '/solucoes#integracoes' },
+      { rotulo: 'Dados e dashboards', href: '/solucoes#dados' },
+    ],
+  },
+  {
+    titulo: 'Produtos',
+    itens: [
+      { rotulo: 'CRM para WhatsApp', href: '/produtos/crm-whatsapp' },
+      { rotulo: 'Sistema Escolar', href: '/produtos/sistema-escolar' },
+      { rotulo: 'Todos os produtos', href: '/produtos' },
+    ],
+  },
+  {
+    titulo: 'Empresa',
+    itens: [
+      { rotulo: 'Consultoria', href: '/consultoria' },
+      { rotulo: 'Projetos e cases', href: '/cases' },
+      { rotulo: 'Sobre a Shiv Tech', href: '/sobre' },
+      { rotulo: 'Contato', href: '/contato' },
+    ],
+  },
+];
+---
+
+<footer class="rodape">
+  <div class="container">
+    <div class="rodape-grade">
+      <div class="rodape-marca">
+        <a class="marca" href={url('/')}>
+          <span class="marca-simbolo" aria-hidden="true">S</span>
+          <span>SHIV <span class="marca-destaque">TECH</span></span>
+        </a>
+        <p>{marca.descricaoCurta}</p>
+        <a class="rodape-email" href={`mailto:${emailContato}`}>{emailContato}</a>
+      </div>
+
+      {
+        colunas.map((coluna) => (
+          <nav class="rodape-coluna" aria-label={coluna.titulo}>
+            <h2>{coluna.titulo}</h2>
+            <ul>
+              {coluna.itens.map((item) => (
+                <li>
+                  <a href={url(item.href)}>{item.rotulo}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div class="rodape-base">
+      <span>© {ano} {marca.nome}. Todos os direitos reservados.</span>
+      <span>{marca.assinatura}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .rodape {
+    border-top: 1px solid var(--line);
+    padding-block: 52px 26px;
+    margin-top: 20px;
+  }
+
+  .rodape-grade {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 34px;
+    padding-bottom: 34px;
+  }
+
+  .marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin-bottom: 14px;
+  }
+
+  .marca-simbolo {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 900;
+    font-size: 0.9rem;
+    background: linear-gradient(135deg, #0879ff, #16c8ee);
+  }
+
+  .marca-destaque {
+    color: #18bff0;
+  }
+
+  .rodape-marca p {
+    color: var(--muted);
+    font-size: 0.92rem;
+    max-width: 320px;
+    margin-bottom: 14px;
+  }
+
+  .rodape-email {
+    color: var(--cyan);
+    font-size: 0.92rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    word-break: break-word;
+  }
+
+  .rodape-coluna h2 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  .rodape-coluna ul {
+    display: grid;
+    gap: 9px;
+  }
+
+  .rodape-coluna a {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .rodape-coluna a:hover {
+    color: #fff;
+  }
+
+  .rodape-base {
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    color: var(--muted-soft);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 860px) {
+    .rodape-grade {
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+    .rodape-marca {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .rodape-grade {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

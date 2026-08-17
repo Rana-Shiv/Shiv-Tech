@@ -1,0 +1,29 @@
+---
+/**
+ * Chamada final para contato, repetida no fim de cada página.
+ * Decisão de UX: o visitante nunca chega ao fim de uma página sem um
+ * caminho claro para falar com a empresa — o objetivo do site é gerar conversa.
+ */
+import { url } from '../lib/url';
+
+interface Props {
+  titulo?: string;
+  texto?: string;
+}
+
+const {
+  titulo = 'Vamos conversar sobre o seu projeto?',
+  texto = 'Conte qual problema a sua empresa precisa resolver. Se tecnologia for a resposta, a gente constrói. Se não for, a gente diz também.',
+} = Astro.props;
+---
+
+<section class="cta">
+  <div class="container">
+    <h2>{titulo}</h2>
+    <p>{texto}</p>
+    <div class="actions actions-center">
+      <a class="btn btn-primary" href={url('/contato')}>Falar com a Shiv Tech</a>
+      <a class="btn btn-secondary" href={url('/solucoes')}>Ver as soluções</a>
+    </div>
+  </div>
+</section>

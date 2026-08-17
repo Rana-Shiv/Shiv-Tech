@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+---
+
+<Base
+  titulo="Página não encontrada"
+  descricao="A página que você procurava não existe ou mudou de endereço."
+  indexar={false}
+>
+  <section class="erro">
+    <div class="container">
+      <p class="eyebrow">Erro 404</p>
+      <h1>Esta página não existe.</h1>
+      <p class="lead">
+        O endereço pode ter mudado ou o link estar incorreto. Abaixo estão os
+        caminhos principais do site.
+      </p>
+      <div class="actions actions-center">
+        <a class="btn btn-primary" href={url('/')}>Voltar ao início</a>
+        <a class="btn btn-secondary" href={url('/solucoes')}>Ver soluções</a>
+        <a class="btn btn-secondary" href={url('/contato')}>Falar com a gente</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .erro {
+    padding-block: 110px 130px;
+    text-align: center;
+  }
+
+  .erro h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    margin: 16px 0 14px;
+  }
+
+  .erro .lead {
+    margin-inline: auto;
+  }
+</style>
