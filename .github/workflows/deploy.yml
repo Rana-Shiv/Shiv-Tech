@@ -1,0 +1,73 @@
+# ---------------------------------------------------------------------------
+# PUBLICAÇÃO AUTOMÁTICA NO GITHUB PAGES
+#
+# O que este arquivo faz, em português:
+# toda vez que algo for enviado para o branch principal, o GitHub liga uma
+# máquina temporária, instala as dependências do projeto, gera o site
+# (transforma os arquivos .astro e .md em HTML puro) e publica o resultado.
+#
+# Você não roda nada manualmente. Editou um texto pelo site do GitHub?
+# Em cerca de um minuto o site já está no ar com a alteração.
+#
+# PRÉ-REQUISITO (uma vez só):
+# No repositório, vá em Settings > Pages > Build and deployment
+# e mude "Source" de "Deploy from a branch" para "GitHub Actions".
+# ---------------------------------------------------------------------------
+
+name: Publicar site
+
+on:
+  # Publica quando houver alteração no branch principal
+  push:
+    branches: [main]
+  # Permite publicar manualmente pela aba Actions
+  workflow_dispatch:
+
+# Permissões mínimas necessárias para publicar no Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Se você enviar duas alterações seguidas, a segunda espera a primeira
+# terminar em vez de as duas brigarem pela publicação.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  construir:
+    name: Construir o site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Preparar o Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Gerar o site
+        run: npm run build
+
+      - name: Enviar os arquivos gerados
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  publicar:
+    name: Publicar no GitHub Pages
+    needs: construir
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.publicacao.outputs.page_url }}
+    steps:
+      - name: Publicar
+        id: publicacao
+        uses: actions/deploy-pages@v4
